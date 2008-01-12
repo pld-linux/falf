@@ -9,7 +9,7 @@ Version:	1.0
 Release:	0.5
 License:	GPL
 Group:		X11/Applications
-Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+Source0:	http://dl.sourceforge.net/falf/%{name}-%{version}.tar.bz2
 # Source0-md5:	d80056c9d7f91ce377eb5fd01043b700
 URL:		http://falf.sf.net/
 BuildRequires:	gettext-devel
@@ -36,19 +36,19 @@ Highlights:
 - low memory consumption
 
 %description -l pl.UTF-8
-FALF Player jest wzorowany na foobar2000 odtwarzaczem muzyki dla KDE.
+FALF Player jest wzorowanym na foobar2000 odtwarzaczem muzyki dla KDE.
 
 Atuty:
-- wsparcie dla wielu list odtwarzania
-- wsparcie dla tekstow piosenek
-- wsparcie dla plikow m3u
-- wsparcie dla last.fm
-- wsparcie dla strumieni HTTP (radio)
-- wbudowany edytor tagow
+- obsługa wielu list odtwarzania
+- obsługa tekstów piosenek
+- obsługa plików m3u
+- obsługa last.fm
+- obsługa strumieni HTTP (radio)
+- wbudowany edytor znaczników
 - wbudowany korektor
-- latwe przenoszenie danych do odtwarzaczy przenosnych
-- wysoka stabilnosc
-- niskie zuzycie pamieci
+- łatwe przenoszenie danych do odtwarzaczy przenośnych
+- wysoka stabilność
+- niskie zużycie pamięci
 
 %prep
 %setup -q
@@ -84,4 +84,4 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/falf
 %{_datadir}/apps/konqueror/servicemenus/falf_mnu.desktop
 %{_desktopdir}/falf.desktop
-%{_iconsdir}/*/*/*/*.png
+%{_iconsdir}/hicolor/*/*/*.png
