@@ -6,7 +6,7 @@ Summary:	Lightweight music player with multiplaylists for KDE
 Summary(pl.UTF-8):	Lekki odtwarzacz muzyki z wieloma listami odtwarzania dla KDE
 Name:		falf
 Version:	1.1
-Release:	0.1
+Release:	1
 License:	GPL
 Group:		X11/Applications
 Source0:	http://dl.sourceforge.net/falf/%{name}-%{version}.tar.bz2
@@ -18,6 +18,7 @@ BuildRequires:	qmake >= 3.3.0
 BuildRequires:	rpmbuild(macros) >= 1.129
 BuildRequires:	taglib-devel
 BuildRequires:	xine-lib-devel
+Requires:	xine-plugin-audio
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
