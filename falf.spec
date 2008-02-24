@@ -11,7 +11,7 @@ License:	GPL
 Group:		X11/Applications
 Source0:	http://dl.sourceforge.net/falf/%{name}-%{version}.tar.bz2
 # Source0-md5:	389880b64941017ca4300f4b8ffdebce
-URL:		http://falf.sf.net/
+URL:		http://falf.sourceforge.net/
 BuildRequires:	gettext-devel
 BuildRequires:	kdelibs-devel >= 9:3.2.0
 BuildRequires:	qmake >= 3.3.0
@@ -54,7 +54,7 @@ Atuty:
 %setup -q
 
 %build
-export QTDIR=/usr
+export QTDIR=%{_prefix}
 qmake
 %{__make}
 
