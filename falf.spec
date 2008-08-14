@@ -5,12 +5,12 @@
 Summary:	Lightweight music player with multiplaylists for KDE
 Summary(pl.UTF-8):	Lekki odtwarzacz muzyki z wieloma listami odtwarzania dla KDE
 Name:		falf
-Version:	1.1
+Version:	1.3
 Release:	1
 License:	GPL
 Group:		X11/Applications
 Source0:	http://dl.sourceforge.net/falf/%{name}-%{version}.tar.bz2
-# Source0-md5:	389880b64941017ca4300f4b8ffdebce
+# Source0-md5:	d26042a930c6a166630591abbeffe6fb
 URL:		http://falf.sourceforge.net/
 BuildRequires:	gettext-devel
 BuildRequires:	kdelibs-devel >= 9:3.2.0
