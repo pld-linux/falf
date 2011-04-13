@@ -1,0 +1,195 @@
+--- player.cpp	2008/09/16 19:41:09	274
++++ player.cpp	2009/04/21 20:44:39	275
+@@ -1,5 +1,5 @@
+ /*
+-    Copyright (c) 2006-2008 by amdfanatyk <amdfanatyk@o2.pl>
++    Copyright (c) 2006-2009 by amdfanatyk <amdfanatyk@o2.pl>
+ 
+     *************************************************************************
+     *                                                                       *
+@@ -26,6 +26,8 @@
+ 	ao_port = xine_open_audio_driver(xine, NULL, NULL);
+ 
+ 	term = true;
++	restoring = false;
++
+ 	pos = 0;
+ 	stream = 0;
+ 
+@@ -98,6 +100,9 @@
+ void Player::setVolume(const int & vol)
+ {
+ 	volume = vol;
++
++	if (stream)
++		xine_set_param(stream, XINE_PARAM_AUDIO_VOLUME, volume);
+ }
+ 
+ int Player::getLength() const
+@@ -115,6 +120,11 @@
+ 	return pos;
+ }
+ 
++bool Player::getRestoring() const
++{
++	return restoring;
++}
++
+ void Player::setPos(const int & p)
+ {
+ 	pos = p;
+@@ -155,6 +165,11 @@
+ 	term = false;
+ }
+ 
++void Player::setRestoring(const bool value)
++{
++	restoring = value;
++}
++
+ void Player::run()
+ {
+ 	if (!xine)
+@@ -168,16 +183,21 @@
+ 	if (!xine_open(stream, (const char *)track.local8Bit()) || !xine_play(stream, 0, pos))
+ 		goto cleanup;
+ 
++	setVolume(volume);
++
+ 	while ((xine_get_status(stream) == XINE_STATUS_PLAY) && (!term))
+ 	{
+-		xine_set_param(stream, XINE_PARAM_AUDIO_VOLUME, volume);
++		if (restoring)
++			setVolume(volume);
++		else
++			volume = xine_get_param(stream, XINE_PARAM_AUDIO_VOLUME);
++
+ 		xine_get_pos_length(stream, NULL, &pos, &length);
+ 	
+ 		QThread::msleep(250);
+ 	}
+ 
+ cleanup:
+-
+ 	xine_close(stream);
+ 	xine_dispose(stream);
+ 
+--- frmmain.ui.h	2008/09/16 19:41:09	274
++++ frmmain.ui.h	2009/04/21 20:44:39	275
+@@ -1,5 +1,5 @@
+ /*
+-    Copyright (c) 2006-2008 by amdfanatyk <amdfanatyk@o2.pl>
++    Copyright (c) 2006-2009 by amdfanatyk <amdfanatyk@o2.pl>
+ 
+     *************************************************************************
+     *                                                                       *
+@@ -571,6 +571,8 @@
+ 					player.setPos(frame);
+ 					sldPos->setValue(frame);
+ 
++					player.setRestoring(true);
++
+ 					QTimer::singleShot(0, this, SLOT(onAction()));
+ 				}
+ 			}
+@@ -1154,6 +1156,9 @@
+ 	sldPos->setMaxValue(player.getLength()); // doesn't work without it ;[
+ 	sldPos->setValue(player.getPos());
+ 
++	if (!player.getRestoring())
++		sldVol->setValue(player.getVolume());
++
+ 	if (!player.running())
+ 	{
+ 		eqAdj = false;
+@@ -3231,17 +3236,18 @@
+ 
+ void frmMain::restoreVolume()
+ {
+-	const int & vol = player.getVolume();
++	const int vol = (player.getVolume() + 5);
+ 
+-	if (vol < desiredVolume)
++	if (vol >= desiredVolume)
+ 	{
+-		if ((vol + 5) > desiredVolume)
+-			sldVol->setValue(desiredVolume);
+-		else
+-			player.setVolume(vol + 5);
++		volumeTimer.stop();
++
++		sldVol->setValue(desiredVolume);
++
++		player.setRestoring(false);
+ 	}
+ 	else
+-		volumeTimer.stop();
++		player.setVolume(vol);
+ }
+ 
+ void frmMain::makeUpPlaylist(int id)
+--- player.h	2008/09/16 19:41:09	274
++++ player.h	2009/04/21 20:44:39	275
+@@ -38,6 +38,7 @@
+ 		int getLength() const;
+ 		int getVolume() const;
+ 		int getPos() const;
++		bool getRestoring() const;
+ 		QString getTrack() const;
+ 		QStringList getAudioCDContents(const QString & device) const;
+ 		const xine_t * getXineHandle() const;
+@@ -49,18 +50,22 @@
+ 		void termThread();
+ 		void wakeThread();
+ 
++		void setRestoring(bool);
++
+ 	private:
+ 		QString xineVer;
+ 		QString track;
+ 		bool term;
++		bool restoring;
+ 
+ 		int volume;
+ 		int length;
+ 		int pos;
+ 
+-		xine_t            * xine;
+-		xine_stream_t     * stream;
+-		xine_audio_port_t * ao_port;
++		xine_t             * xine;
++		xine_stream_t      * stream;
++		xine_audio_port_t  * ao_port;
++		xine_event_queue_t * event_queue;
+ };
+ 
+ #endif
+--- frmmain.ui.h	2010/12/30 19:27:09	291
++++ frmmain.ui.h	2011/01/01 00:39:30	292
+@@ -1,5 +1,5 @@
+ /*
+-    Copyright (c) 2006-2010 by amdfanatyk <amdfanatyk@o2.pl>
++    Copyright (c) 2006-2011 by amdfanatyk <amdfanatyk@o2.pl>
+ 
+     *************************************************************************
+     *                                                                       *
+@@ -341,6 +341,9 @@
+ 
+ 	alreadyRunning = false;
+ 
++	if (!dir.exists())
++		QDir().mkdir(dir.path());
++
+ 	if (lockFile.exists())
+ 	{
+ 		if (files.isEmpty())
+@@ -378,9 +381,6 @@
+ 		lockFile.close();
+ 	}
+ 
+-	if (!dir.exists())
+-		QDir().mkdir(dir.path());
+-
+ 	http = 0;
+ 	lyricsErrStr = i18n("No lyrics found");
+ 	sldVol->setValue(50);

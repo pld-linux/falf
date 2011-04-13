@@ -11,6 +11,7 @@ License:	GPL
 Group:		X11/Applications
 Source0:	http://dl.sourceforge.net/falf/%{name}-%{version}.tar.bz2
 # Source0-md5:	d26042a930c6a166630591abbeffe6fb
+Patch0:		%{name}-volume.patch
 URL:		http://falf.sourceforge.net/
 BuildRequires:	gettext-devel
 BuildRequires:	kdelibs-devel >= 9:3.2.0
@@ -53,6 +54,7 @@ Atuty:
 
 %prep
 %setup -q
+%patch0 -p0
 
 %build
 export QTDIR=%{_prefix}
