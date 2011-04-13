@@ -2,6 +2,8 @@
 # TODO:
 # - prepare patch to Makefile (install)
 
+%bcond_without	kde3support
+
 Summary:	Lightweight music player with multiplaylists for KDE
 Summary(pl.UTF-8):	Lekki odtwarzacz muzyki z wieloma listami odtwarzania dla KDE
 Name:		falf
@@ -13,10 +15,13 @@ Source0:	http://dl.sourceforge.net/falf/%{name}-%{version}.tar.bz2
 # Source0-md5:	d26042a930c6a166630591abbeffe6fb
 Patch0:		%{name}-volume.patch
 URL:		http://falf.sourceforge.net/
+BuildConflicts:	kde4-kdelibs-devel
 BuildRequires:	gettext-devel
-BuildRequires:	kdelibs-devel >= 9:3.2.0
+%{!?with_kde3support:BuildRequires:	kdelibs-devel >= 9:3.2.0}
+%{?with_kde3support:BuildRequires:	kde4-kde3support-devel}
 BuildRequires:	qmake >= 3.3.0
 BuildRequires:	rpmbuild(macros) >= 1.129
+BuildRequires:	sed >= 4.0
 BuildRequires:	taglib-devel
 BuildRequires:	xine-lib-devel
 Requires:	xine-plugin-audio
@@ -55,6 +60,9 @@ Atuty:
 %prep
 %setup -q
 %patch0 -p0
+
+%{?with_kde3support:%{__sed} -i 's:/usr/include/kde:/usr/include/kde3:' falf.pro}
+%{?with_kde3support:%{__sed} -i 's:/usr/kde/3.5/lib:/usr/%{_lib}/kde3dev:' falf.pro}
 
 %build
 export QTDIR=%{_prefix}

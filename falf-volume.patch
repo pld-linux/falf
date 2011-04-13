@@ -76,13 +76,6 @@
  
 --- frmmain.ui.h	2008/09/16 19:41:09	274
 +++ frmmain.ui.h	2009/04/21 20:44:39	275
-@@ -1,5 +1,5 @@
- /*
--    Copyright (c) 2006-2008 by amdfanatyk <amdfanatyk@o2.pl>
-+    Copyright (c) 2006-2009 by amdfanatyk <amdfanatyk@o2.pl>
- 
-     *************************************************************************
-     *                                                                       *
 @@ -571,6 +571,8 @@
  					player.setPos(frame);
  					sldPos->setValue(frame);
@@ -166,13 +159,6 @@
  #endif
 --- frmmain.ui.h	2010/12/30 19:27:09	291
 +++ frmmain.ui.h	2011/01/01 00:39:30	292
-@@ -1,5 +1,5 @@
- /*
--    Copyright (c) 2006-2010 by amdfanatyk <amdfanatyk@o2.pl>
-+    Copyright (c) 2006-2011 by amdfanatyk <amdfanatyk@o2.pl>
- 
-     *************************************************************************
-     *                                                                       *
 @@ -341,6 +341,9 @@
  
  	alreadyRunning = false;
