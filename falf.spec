@@ -27,8 +27,6 @@ BuildRequires:	xine-lib-devel
 Requires:	xine-plugin-audio
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		specflags	-fpermissive
-
 %description
 FALF Player is based on foobar2000 music player for KDE.
 
@@ -68,6 +66,7 @@ Atuty:
 
 %build
 export QTDIR=%{_prefix}
+export CXXFLAGS="%{rpmcxxflags} -fpermissive"
 qmake
 %{__make}
 
