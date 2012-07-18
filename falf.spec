@@ -67,6 +67,7 @@ Atuty:
 %build
 export QTDIR=%{_prefix}
 export CXXFLAGS="%{rpmcxxflags} -fpermissive"
+export CFLAGS="%{rpmcflags} -fpermissive"
 qmake
 %{__make}
 
