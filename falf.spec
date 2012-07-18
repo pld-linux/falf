@@ -14,6 +14,7 @@ Group:		X11/Applications
 Source0:	http://dl.sourceforge.net/falf/%{name}-%{version}.tar.bz2
 # Source0-md5:	d26042a930c6a166630591abbeffe6fb
 Patch0:		%{name}-volume.patch
+Patch1:		%{name}-usleep.patch
 URL:		http://falf.sourceforge.net/
 BuildConflicts:	kde4-kdelibs-devel
 BuildRequires:	gettext-devel
@@ -60,15 +61,17 @@ Atuty:
 %prep
 %setup -q
 %patch0 -p0
+%patch1 -p1
 
 %{?with_kde3support:%{__sed} -i 's:/usr/include/kde:/usr/include/kde3:' falf.pro}
 %{?with_kde3support:%{__sed} -i 's:/usr/kde/3.5/lib:/usr/%{_lib}/kde3dev:' falf.pro}
 
 %build
 export QTDIR=%{_prefix}
-export CXXFLAGS="%{rpmcxxflags} -fpermissive"
-export CFLAGS="%{rpmcflags} -fpermissive"
-qmake
+qmake \
+	QMAKE_CXXFLAGS="%{rpmcxxflags} -fpermissive" \
+	QMAKE_CFLAGS="%{rpmcflags} -fpermissive"
+
 %{__make}
 
 %install
