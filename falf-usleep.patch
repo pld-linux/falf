@@ -1,0 +1,10 @@
+--- falf-1.3/frmmain.ui.h~	2012-07-18 14:54:14.824340192 +0200
++++ falf-1.3/frmmain.ui.h	2012-07-18 14:58:01.714332189 +0200
+@@ -42,6 +42,7 @@
+ #include <tag.h>
+ 
+ #include <cstdlib>
++#include <unistd.h>
+ 
+ #define CURRENT_PLAYLIST collection.getPlaylist(tabPlaylist->currentPageIndex())
+ #define CURRENT_TRACK lstPlaylist->selectedItem()
