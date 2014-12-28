@@ -17,7 +17,7 @@ Patch0:		%{name}-volume.patch
 Patch1:		%{name}-usleep.patch
 URL:		http://falf.sourceforge.net/
 BuildConflicts:	kde4-kdelibs-devel
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 %{!?with_kde3support:BuildRequires:	kdelibs-devel >= 9:3.2.0}
 %{?with_kde3support:BuildRequires:	kde4-kde3support-devel}
 BuildRequires:	qmake >= 3.3.0
