@@ -60,8 +60,8 @@ Atuty:
 
 %prep
 %setup -q
-%patch0 -p0
-%patch1 -p1
+%patch -P0 -p0
+%patch -P1 -p1
 
 %{?with_kde3support:%{__sed} -i 's:/usr/include/kde:/usr/include/kde3:' falf.pro}
 %{?with_kde3support:%{__sed} -i 's:/usr/kde/3.5/lib:/usr/%{_lib}/kde3dev:' falf.pro}
